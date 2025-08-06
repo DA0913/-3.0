@@ -1,6 +1,69 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { ArrowRight, Phone, Shield, CheckCircle } from 'lucide-react';
 import FormButton from './FormButton';
+
+// 简化的数字动画组件
+const AnimatedNumber: React.FC<{value: number; duration?: number; delay?: number; formatNumber?: boolean; className?: string}> = ({ 
+  value, 
+  duration = 2000, 
+  delay = 0, 
+  formatNumber = true, 
+  className = '' 
+}) => {
+  const [currentValue, setCurrentValue] = useState(0);
+  const [isVisible, setIsVisible] = useState(false);
+  const elementRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !isVisible) {
+          setIsVisible(true);
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    if (elementRef.current) {
+      observer.observe(elementRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, [isVisible]);
+
+  useEffect(() => {
+    if (!isVisible) return;
+
+    const timer = setTimeout(() => {
+      const startTime = Date.now();
+      const animate = () => {
+        const now = Date.now();
+        const elapsed = now - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        const easeProgress = 1 - Math.pow(1 - progress, 3);
+        const newValue = Math.floor(value * easeProgress);
+        
+        setCurrentValue(newValue);
+
+        if (progress < 1) {
+          requestAnimationFrame(animate);
+        } else {
+          setCurrentValue(value);
+        }
+      };
+
+      requestAnimationFrame(animate);
+    }, delay);
+
+    return () => clearTimeout(timer);
+  }, [isVisible, value, duration, delay]);
+
+  return (
+    <div ref={elementRef} className={`${className} animate-count-up`}>
+      {formatNumber ? currentValue.toLocaleString() : currentValue}
+    </div>
+  );
+};
 
 const Hero = () => {
   const scrollToModules = () => {
@@ -239,19 +302,34 @@ const Hero = () => {
                   
                   {/* Stats Grid */}
                   <div className="grid grid-cols-3 gap-1 sm:gap-2 lg:gap-3 mb-2 sm:mb-3 lg:mb-4">
-                    <div className="bg-gradient-to-br from-blue-50/80 to-indigo-50/80 backdrop-blur-sm rounded-md lg:rounded-lg p-1.5 sm:p-2 lg:p-3 border border-gray-100/50">
+                    <div className="bg-gradient-to-br from-blue-50/80 to-indigo-50/80 backdrop-blur-sm rounded-md lg:rounded-lg p-1.5 sm:p-2 lg:p-3 border border-gray-100/50 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
                       <div className="text-xs text-gray-500 mb-0.5 sm:mb-1">销售额</div>
-                      <div className="text-xs sm:text-sm font-bold text-gray-900">8,249,082</div>
+                      <AnimatedNumber 
+                        value={8249082} 
+                        duration={2500}
+                        delay={200}
+                        className="text-xs sm:text-sm font-bold text-gray-900"
+                      />
                       <div className="text-xs text-gray-500">美元</div>
                     </div>
-                    <div className="bg-gradient-to-br from-emerald-50/80 to-teal-50/80 backdrop-blur-sm rounded-md lg:rounded-lg p-1.5 sm:p-2 lg:p-3 border border-gray-100/50">
+                    <div className="bg-gradient-to-br from-emerald-50/80 to-teal-50/80 backdrop-blur-sm rounded-md lg:rounded-lg p-1.5 sm:p-2 lg:p-3 border border-gray-100/50 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
                       <div className="text-xs text-gray-500 mb-0.5 sm:mb-1">总支出</div>
-                      <div className="text-xs sm:text-sm font-bold text-gray-900">5,386,000</div>
+                      <AnimatedNumber 
+                        value={5386000} 
+                        duration={2500}
+                        delay={600}
+                        className="text-xs sm:text-sm font-bold text-gray-900"
+                      />
                       <div className="text-xs text-gray-500">美元</div>
                     </div>
-                    <div className="bg-gradient-to-br from-purple-50/80 to-pink-50/80 backdrop-blur-sm rounded-md lg:rounded-lg p-1.5 sm:p-2 lg:p-3 border border-gray-100/50">
+                    <div className="bg-gradient-to-br from-purple-50/80 to-pink-50/80 backdrop-blur-sm rounded-md lg:rounded-lg p-1.5 sm:p-2 lg:p-3 border border-gray-100/50 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
                       <div className="text-xs text-gray-500 mb-0.5 sm:mb-1">主利润</div>
-                      <div className="text-xs sm:text-sm font-bold text-[#194fe8]">2,820,082</div>
+                      <AnimatedNumber 
+                        value={2820082} 
+                        duration={2500}
+                        delay={1000}
+                        className="text-xs sm:text-sm font-bold text-[#194fe8]"
+                      />
                       <div className="text-xs text-gray-500">美元</div>
                     </div>
                   </div>
@@ -273,20 +351,33 @@ const Hero = () => {
 
                   {/* Analytics Section */}
                   <div className="grid grid-cols-2 gap-1.5 sm:gap-2 lg:gap-3">
-                    <div className="bg-gradient-to-br from-orange-50/80 to-amber-50/80 backdrop-blur-sm rounded-md lg:rounded-lg p-2 sm:p-3 border border-gray-100/50">
+                    <div className="bg-gradient-to-br from-orange-50/80 to-amber-50/80 backdrop-blur-sm rounded-md lg:rounded-lg p-2 sm:p-3 border border-gray-100/50 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
                       <div className="text-xs font-semibold text-gray-900 mb-0.5 sm:mb-1">销售分析</div>
-                      <div className="text-xs sm:text-sm font-bold text-[#194fe8] mb-1 sm:mb-2">69,496 美元</div>
-                      <div className="h-1.5 bg-gray-200 rounded-full">
-                        <div className="h-1.5 bg-[#194fe8] rounded-full w-3/4 animate-pulse"></div>
+                      <div className="text-xs sm:text-sm font-bold text-[#194fe8] mb-1 sm:mb-2">
+                        <AnimatedNumber 
+                          value={69496} 
+                          duration={2000}
+                          delay={1400}
+                          formatNumber={true}
+                        /> 美元
+                      </div>
+                      <div className="h-1.5 bg-gray-200 rounded-full overflow-hidden">
+                        <div className="h-1.5 bg-gradient-to-r from-[#194fe8] to-blue-400 rounded-full w-3/4 animate-[slideIn_2s_ease-out_1.6s_both]"></div>
                       </div>
                     </div>
-                    <div className="bg-gradient-to-br from-rose-50/80 to-pink-50/80 backdrop-blur-sm rounded-md lg:rounded-lg p-2 sm:p-3 border border-gray-100/50">
+                    <div className="bg-gradient-to-br from-rose-50/80 to-pink-50/80 backdrop-blur-sm rounded-md lg:rounded-lg p-2 sm:p-3 border border-gray-100/50 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
                       <div className="text-xs font-semibold text-gray-900 mb-0.5 sm:mb-1">支出分析</div>
                       <div className="flex items-center justify-center">
-                        <div className="relative w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12">
+                        <div className="relative w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 animate-[spin_3s_ease-in-out_1.8s_both]">
                           <div className="absolute inset-0 bg-gray-200 rounded-full"></div>
                           <div className="absolute inset-1 bg-white rounded-full flex items-center justify-center border-2 border-[#194fe8]">
-                            <span className="text-xs font-bold text-[#194fe8]">540</span>
+                            <AnimatedNumber 
+                              value={540} 
+                              duration={1500}
+                              delay={1800}
+                              formatNumber={false}
+                              className="text-xs font-bold text-[#194fe8]"
+                            />
                           </div>
                         </div>
                       </div>

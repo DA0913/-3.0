@@ -38,6 +38,14 @@ interface CustomerCase {
   company_size?: string;
   highlight_tags?: string[];
   company_description?: string;
+  // 新增显示控制字段
+  show_on_homepage?: boolean; // 是否在首页客户案例区显示
+  show_in_banner?: boolean;   // 是否在客户案例页banner区显示
+  show_in_partners?: boolean; // 是否在合作案例区显示
+  // 新增联系人信息字段
+  contact_avatar?: string;
+  contact_name?: string;
+  contact_position?: string;
 }
 
 // 预定义的模拟数据
@@ -132,7 +140,15 @@ const CombinedCaseManagement: React.FC = () => {
     detail_url: '',
     company_size: '',
     highlight_tags: [] as string[],
-    company_description: ''
+    company_description: '',
+    // 新增显示控制字段
+    show_on_homepage: false,
+    show_in_banner: false,
+    show_in_partners: false,
+    // 新增联系人信息字段
+    contact_avatar: '',
+    contact_name: '',
+    contact_position: ''
   });
 
   // 获取数据
@@ -140,7 +156,7 @@ const CombinedCaseManagement: React.FC = () => {
     try {
       setLoading(true);
       const response = await db.getCustomerCases({ limit: 50 });
-      
+
       if (response.data && response.data.length > 0) {
         setCustomerCases(response.data);
       }
@@ -165,9 +181,9 @@ const CombinedCaseManagement: React.FC = () => {
       
       if (newSampleData.length === 0) {
         alert('示例数据已经存在，无需重复导入');
-        return;
-      }
-      
+      return;
+    }
+
       const importPromises = newSampleData.map(async (sampleCase) => {
         const { id, created_at, updated_at, ...caseData } = sampleCase;
         return db.createCustomerCase({
@@ -178,7 +194,7 @@ const CombinedCaseManagement: React.FC = () => {
       
       const results = await Promise.all(importPromises);
       const successCount = results.filter(r => !r.error).length;
-      
+
       if (successCount > 0) {
         alert(`成功导入 ${successCount} 条示例数据`);
         await fetchCustomerCases();
@@ -199,12 +215,12 @@ const CombinedCaseManagement: React.FC = () => {
       
       // 获取所有激活的案例
       const response = await db.getCustomerCases({ limit: 50, status: 'active' });
-      
+    
       if (response.error || !response.data) {
         alert('同步失败：无法获取案例数据');
-        return;
-      }
-      
+      return;
+    }
+
       const activeCase = response.data;
       const featuredCases = activeCase.filter(c => c.is_featured);
       const regularCases = activeCase.filter(c => !c.is_featured);
@@ -263,7 +279,15 @@ const CombinedCaseManagement: React.FC = () => {
       detail_url: '',
       company_size: '',
       highlight_tags: [] as string[],
-      company_description: ''
+      company_description: '',
+      // 新增显示控制字段
+      show_on_homepage: false,
+      show_in_banner: false,
+      show_in_partners: false,
+      // 新增联系人信息字段
+      contact_avatar: '',
+      contact_name: '',
+      contact_position: ''
     });
     setEditingItem(null);
     setShowEditor(false);
@@ -288,7 +312,15 @@ const CombinedCaseManagement: React.FC = () => {
       detail_url: case_.detail_url || '',
       company_size: case_.company_size || '',
       highlight_tags: case_.highlight_tags || [],
-      company_description: case_.company_description || ''
+      company_description: case_.company_description || '',
+      // 新增显示控制字段
+      show_on_homepage: case_.show_on_homepage || false,
+      show_in_banner: case_.show_in_banner || false,
+      show_in_partners: case_.show_in_partners || false,
+      // 新增联系人信息字段
+      contact_avatar: case_.contact_avatar || '',
+      contact_name: case_.contact_name || '',
+      contact_position: case_.contact_position || ''
     });
     setShowEditor(true);
   };
@@ -303,7 +335,7 @@ const CombinedCaseManagement: React.FC = () => {
         console.error('删除失败:', response.error);
         return;
       }
-      
+
       setCustomerCases(prev => prev.filter(case_ => case_.id !== id));
       alert('删除成功');
     } catch (error) {
@@ -355,7 +387,7 @@ const CombinedCaseManagement: React.FC = () => {
         if (response.data) {
           setCustomerCases(prev => [response.data as CustomerCase, ...prev]);
           alert('创建成功');
-        }
+      }
       }
       
       resetForm();
@@ -403,18 +435,18 @@ const CombinedCaseManagement: React.FC = () => {
   return (
     <div className="max-w-7xl mx-auto p-6 space-y-6">
       {/* 页面标题 */}
-      <div className="flex items-center justify-between">
-        <div>
+          <div className="flex items-center justify-between">
+            <div>
           <h1 className="text-2xl font-bold text-gray-900">客户案例管理</h1>
           <p className="text-gray-600 mt-1">管理和维护客户成功案例</p>
-        </div>
+            </div>
         <div className="flex items-center space-x-3">
           <span className="text-sm text-gray-500">共 {customerCases.length} 个案例</span>
           <span className="text-sm text-gray-500">·</span>
           <span className="text-sm text-gray-500">精选 {customerCases.filter(c => c.is_featured).length} 个</span>
+          </div>
         </div>
-      </div>
-
+        
       {/* 操作工具栏 */}
       <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-3 sm:space-y-0">
@@ -428,7 +460,7 @@ const CombinedCaseManagement: React.FC = () => {
               onChange={(e) => setSearchTerm(e.target.value)}
               className="pl-10 pr-4 py-2 w-full border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
-          </div>
+        </div>
 
           {/* 操作按钮 */}
           <div className="flex items-center space-x-2">
@@ -469,7 +501,7 @@ const CombinedCaseManagement: React.FC = () => {
             </button>
           </div>
         </div>
-      </div>
+            </div>
 
       {/* 案例列表 */}
       <div className="bg-white rounded-lg shadow-sm border border-gray-200">
@@ -480,16 +512,16 @@ const CombinedCaseManagement: React.FC = () => {
               {searchTerm ? '没有找到匹配的案例' : '暂无案例数据'}
             </p>
             {!searchTerm && (
-              <button
+            <button
                 onClick={importSampleData}
                 className="mt-4 text-blue-600 hover:text-blue-700 font-medium"
               >
                 导入示例数据
-              </button>
+            </button>
             )}
           </div>
         ) : (
-          <div className="overflow-x-auto">
+        <div className="overflow-x-auto">
             <table className="w-full">
               <thead className="bg-gray-50">
                 <tr>
@@ -507,6 +539,9 @@ const CombinedCaseManagement: React.FC = () => {
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     状态
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    显示位置
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     操作
@@ -544,7 +579,7 @@ const CombinedCaseManagement: React.FC = () => {
                         ) : (
                           <div className="w-full h-full flex items-center justify-center">
                             <ImageIcon className="w-6 h-6 text-gray-400" />
-                          </div>
+                      </div>
                         )}
                       </div>
                     </td>
@@ -569,10 +604,34 @@ const CombinedCaseManagement: React.FC = () => {
                             : 'bg-gray-100 text-gray-700'
                         }`}>
                           {case_.status === 'active' ? '激活' : '停用'}
-                        </span>
+                      </span>
                         {case_.is_featured && (
                           <span className="px-2 py-1 text-xs font-medium bg-yellow-100 text-yellow-700 rounded-full">
                             精选
+                      </span>
+                        )}
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="flex flex-col space-y-1">
+                        {case_.show_on_homepage && (
+                          <span className="px-2 py-1 text-xs font-medium bg-blue-100 text-blue-700 rounded-full">
+                            首页
+                          </span>
+                        )}
+                        {case_.show_in_banner && (
+                          <span className="px-2 py-1 text-xs font-medium bg-purple-100 text-purple-700 rounded-full">
+                            Banner
+                          </span>
+                        )}
+                        {case_.show_in_partners && (
+                          <span className="px-2 py-1 text-xs font-medium bg-green-100 text-green-700 rounded-full">
+                            合作区
+                          </span>
+                        )}
+                        {!case_.show_on_homepage && !case_.show_in_banner && !case_.show_in_partners && (
+                          <span className="px-2 py-1 text-xs font-medium bg-gray-100 text-gray-500 rounded-full">
+                            未设置
                           </span>
                         )}
                       </div>
@@ -630,234 +689,332 @@ const CombinedCaseManagement: React.FC = () => {
                   <X className="w-6 h-6" />
                 </button>
               </div>
-            </div>
+              </div>
 
             <form onSubmit={handleSubmit} className="p-6 space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    公司名称 *
-                  </label>
-                  <input
-                    type="text"
-                    required
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        公司名称 *
+                      </label>
+                      <input
+                        type="text"
+                        required
                     value={formData.company_name}
                     onChange={(e) => setFormData({ ...formData, company_name: e.target.value })}
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    placeholder="请输入公司名称"
-                  />
-                </div>
+                        placeholder="请输入公司名称"
+                      />
+                    </div>
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
                     公司Logo
-                  </label>
-                  <input
-                    type="text"
+                      </label>
+                      <input
+                        type="text"
                     value={formData.company_logo}
                     onChange={(e) => setFormData({ ...formData, company_logo: e.target.value })}
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     placeholder="如：A"
-                  />
-                </div>
+                      />
+                    </div>
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    行业 *
-                  </label>
-                  <input
-                    type="text"
-                    required
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        行业 *
+                      </label>
+                      <input
+                        type="text"
+                        required
                     value={formData.industry}
                     onChange={(e) => setFormData({ ...formData, industry: e.target.value })}
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    placeholder="请输入行业"
-                  />
-                </div>
+                        placeholder="请输入行业"
+                      />
+                    </div>
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    排序顺序
-                  </label>
-                  <input
-                    type="number"
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        排序顺序
+                      </label>
+                      <input
+                        type="number"
                     value={formData.sort_order}
                     onChange={(e) => setFormData({ ...formData, sort_order: parseInt(e.target.value) || 0 })}
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    placeholder="0"
-                  />
+                        placeholder="0"
+                      />
                 </div>
-              </div>
+                    </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
                   描述 *
-                </label>
-                <textarea
-                  required
+                      </label>
+                      <textarea
+                        required
                   value={formData.description}
                   onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  rows={3}
+                        rows={3}
                   placeholder="请输入描述"
-                />
-              </div>
+                      />
+                    </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
                   成果 *
-                </label>
-                <textarea
-                  required
+                      </label>
+                      <textarea
+                        required
                   value={formData.results}
                   onChange={(e) => setFormData({ ...formData, results: e.target.value })}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  rows={3}
+                        rows={3}
                   placeholder="请输入成果"
-                />
-              </div>
+                      />
+                    </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  案例图片
-                </label>
-                <ImageUploader
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        案例图片
+                      </label>
+                      <ImageUploader
                   value={formData.image_url}
                   onChange={(url) => setFormData({ ...formData, image_url: url })}
                   placeholder="上传案例图片"
-                />
-              </div>
+                      />
+                    </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
                   案例标题
-                </label>
-                <input
-                  type="text"
+                      </label>
+                      <input
+                        type="text"
                   value={formData.case_title}
                   onChange={(e) => setFormData({ ...formData, case_title: e.target.value })}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   placeholder="如：上市企业「安克创新」：用领星ERP加速数字化建设"
-                />
-              </div>
+                      />
+                    </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
                   案例摘要
-                </label>
-                <textarea
+                      </label>
+                      <textarea
                   value={formData.case_summary}
                   onChange={(e) => setFormData({ ...formData, case_summary: e.target.value })}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  rows={3}
+                        rows={3}
                   placeholder="简短的案例摘要，用于卡片展示"
-                />
-              </div>
+                      />
+                    </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
                   公司规模
-                </label>
-                <input
-                  type="text"
+                      </label>
+                      <input
+                        type="text"
                   value={formData.company_size}
                   onChange={(e) => setFormData({ ...formData, company_size: e.target.value })}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   placeholder="如：上市企业、中小企业、独角兽企业"
-                />
-              </div>
+                      />
+                    </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
                   公司介绍
-                </label>
-                <textarea
+                      </label>
+                      <textarea
                   value={formData.company_description}
                   onChange={(e) => setFormData({ ...formData, company_description: e.target.value })}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  rows={3}
+                        rows={3}
                   placeholder="公司详细介绍"
-                />
-              </div>
+                      />
+                    </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
                   重点标签
-                </label>
-                <input
-                  type="text"
+                      </label>
+                      <input
+                        type="text"
                   value={formData.highlight_tags.join(', ')}
                   onChange={(e) => setFormData({ ...formData, highlight_tags: e.target.value.split(',').map(tag => tag.trim()).filter(tag => tag !== '') })}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   placeholder="多个标签用逗号分隔，如：数字化建设, 供应链优化, 全球化扩张"
-                />
-              </div>
+                      />
+                    </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
                   详情链接
-                </label>
-                <input
+                      </label>
+                      <input
                   type="url"
                   value={formData.detail_url}
                   onChange={(e) => setFormData({ ...formData, detail_url: e.target.value })}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   placeholder="案例详情页链接（可选）"
-                />
-              </div>
+                      />
+                    </div>
 
-              <div className="flex items-center space-x-2">
-                <input
-                  type="checkbox"
+                      <div className="flex items-center space-x-2">
+                        <input
+                          type="checkbox"
                   id="is_featured"
                   checked={formData.is_featured}
                   onChange={(e) => setFormData({ ...formData, is_featured: e.target.checked })}
                   className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
-                />
+                        />
                 <label htmlFor="is_featured" className="text-sm font-medium text-gray-700">
                   设为精选案例
-                </label>
-              </div>
+                        </label>
+                  </div>
 
-              {/* 错误提示 */}
-              {submitError && (
-                <div className="p-3 bg-red-50 border border-red-200 rounded-lg">
-                  <p className="text-sm text-red-600 flex items-center">
-                    <AlertCircle className="w-4 h-4 mr-2" />
-                    {submitError}
-                  </p>
-                </div>
-              )}
+                  {/* 联系人信息 */}
+                  <div className="border-t border-gray-200 pt-4">
+                    <h3 className="text-sm font-medium text-gray-700 mb-3">联系人信息</h3>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          联系人头像
+                        </label>
+                        <ImageUploader
+                          value={formData.contact_avatar}
+                          onChange={(url) => setFormData({ ...formData, contact_avatar: url })}
+                          placeholder="上传联系人头像"
+                        />
+                      </div>
+                      
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          联系人姓名
+                        </label>
+                        <input
+                          type="text"
+                          value={formData.contact_name}
+                          onChange={(e) => setFormData({ ...formData, contact_name: e.target.value })}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                          placeholder="如：张三"
+                        />
+                      </div>
+                      
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          联系人职务
+                        </label>
+                        <input
+                          type="text"
+                          value={formData.contact_position}
+                          onChange={(e) => setFormData({ ...formData, contact_position: e.target.value })}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                          placeholder="如：技术总监"
+                        />
+                      </div>
+                    </div>
+                  </div>
 
-              {/* 操作按钮 */}
-              <div className="flex justify-end space-x-3 pt-4 border-t border-gray-200">
-                <button
-                  type="button"
-                  onClick={resetForm}
-                  disabled={isSubmitting}
-                  className="px-4 py-2 text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors font-medium disabled:opacity-50"
-                >
-                  取消
-                </button>
-                <button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors flex items-center space-x-2 font-medium disabled:opacity-50"
-                >
-                  {isSubmitting ? (
-                    <>
-                      <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                      <span>保存中...</span>
-                    </>
-                  ) : (
-                    <>
-                      <Save className="w-4 h-4" />
-                      <span>{editingItem ? '更新' : '创建'}</span>
-                    </>
+                  {/* 显示控制选项 */}
+                  <div className="border-t border-gray-200 pt-4">
+                    <h3 className="text-sm font-medium text-gray-700 mb-3">显示位置控制</h3>
+                    <div className="space-y-3">
+                      <div className="flex items-center space-x-2">
+                        <input
+                          type="checkbox"
+                          id="show_on_homepage"
+                          checked={formData.show_on_homepage}
+                          onChange={(e) => setFormData({ ...formData, show_on_homepage: e.target.checked })}
+                          className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                        />
+                        <label htmlFor="show_on_homepage" className="text-sm font-medium text-gray-700">
+                          显示在首页客户案例区
+                        </label>
+                      </div>
+                      
+                      <div className="flex items-center space-x-2">
+                        <input
+                          type="checkbox"
+                          id="show_in_banner"
+                          checked={formData.show_in_banner}
+                          onChange={(e) => setFormData({ ...formData, show_in_banner: e.target.checked })}
+                          className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                        />
+                        <label htmlFor="show_in_banner" className="text-sm font-medium text-gray-700">
+                          显示在客户案例页banner区
+                        </label>
+                      </div>
+                      
+                      <div className="flex items-center space-x-2">
+                        <input
+                          type="checkbox"
+                          id="show_in_partners"
+                          checked={formData.show_in_partners}
+                          onChange={(e) => setFormData({ ...formData, show_in_partners: e.target.checked })}
+                          className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                        />
+                        <label htmlFor="show_in_partners" className="text-sm font-medium text-gray-700">
+                          显示在合作案例区
+                        </label>
+                      </div>
+                    </div>
+                    
+                    <div className="mt-3 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                      <p className="text-xs text-blue-700">
+                        <strong>显示逻辑说明：</strong><br/>
+                        • 勾选"首页客户案例区"：在首页"值得信赖的合作伙伴"模块显示<br/>
+                        • 勾选"客户案例页banner区"：在客户案例页顶部大图轮播显示<br/>
+                        • 勾选"合作案例区"：在客户案例页下方网格列表显示<br/>
+                        • 可同时勾选多个选项，案例将在对应区域都显示
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* 错误提示 */}
+                  {submitError && (
+                    <div className="p-3 bg-red-50 border border-red-200 rounded-lg">
+                      <p className="text-sm text-red-600 flex items-center">
+                        <AlertCircle className="w-4 h-4 mr-2" />
+                        {submitError}
+                      </p>
+                    </div>
                   )}
-                </button>
-              </div>
-            </form>
+
+                  {/* 操作按钮 */}
+              <div className="flex justify-end space-x-3 pt-4 border-t border-gray-200">
+                    <button
+                      type="button"
+                      onClick={resetForm}
+                      disabled={isSubmitting}
+                  className="px-4 py-2 text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors font-medium disabled:opacity-50"
+                    >
+                      取消
+                    </button>
+                    <button
+                      type="submit"
+                      disabled={isSubmitting}
+                  className="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors flex items-center space-x-2 font-medium disabled:opacity-50"
+                    >
+                      {isSubmitting ? (
+                        <>
+                          <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                          <span>保存中...</span>
+                        </>
+                      ) : (
+                        <>
+                          <Save className="w-4 h-4" />
+                      <span>{editingItem ? '更新' : '创建'}</span>
+                        </>
+                      )}
+                    </button>
+                  </div>
+                </form>
           </div>
         </div>
       )}

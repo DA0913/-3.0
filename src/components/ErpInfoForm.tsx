@@ -60,20 +60,43 @@ const ErpInfoForm: React.FC<ErpInfoFormProps> = ({ isOpen, onClose }) => {
     '西安',
     '武汉'
   ];
+
+  // 重置表单函数
+  const resetForm = () => {
+    setStep(1);
+    setFormData({
+      identity: '',
+      city: '',
+      services: [],
+      companyName: '',
+      contactName: '',
+      phoneNumber: '',
+      companyType: ''
+    });
+    setErrors({});
+    setSubmitSuccess(false);
+  };
+
+  // 确保每次打开表单时都重置状态，保持一致性
+  useEffect(() => {
+    if (isOpen) {
+      resetForm();
+    }
+  }, [isOpen]);
   
   // 同步到管理后台的函数
   const syncToAdmin = async (formData: any) => {
     try {
       // 提交到form_submissions表
       const response = await db.createFormSubmission({
-        company_name: formData.companyName,
-        user_name: formData.contactName,
-        phone: formData.phoneNumber,
-        company_types: [formData.companyType], // 将公司类型作为数组提交
-        source_url: window.location.href,
+            company_name: formData.companyName,
+            user_name: formData.contactName,
+            phone: formData.phoneNumber,
+            company_types: [formData.companyType], // 将公司类型作为数组提交
+            source_url: window.location.href,
         submitted_at: new Date().toISOString(),
-        status: 'pending',
-        notes: `身份: ${formData.identity}\n城市: ${formData.city}\n服务: ${formData.services.join(', ')}`
+            status: 'pending',
+            notes: `身份: ${formData.identity}\n城市: ${formData.city}\n服务: ${formData.services.join(', ')}`
       });
 
       if (response.error) throw new Error(response.error.message);
@@ -230,21 +253,6 @@ const ErpInfoForm: React.FC<ErpInfoFormProps> = ({ isOpen, onClose }) => {
     }
   };
 
-  const resetForm = () => {
-    setStep(1);
-    setFormData({
-      identity: '',
-      city: '',
-      services: [],
-      companyName: '',
-      contactName: '',
-      phoneNumber: '',
-      companyType: ''
-    });
-    setErrors({});
-    setSubmitSuccess(false);
-  };
-
   if (!isOpen) return null;
 
   return (
@@ -285,8 +293,8 @@ const ErpInfoForm: React.FC<ErpInfoFormProps> = ({ isOpen, onClose }) => {
             ) : (
               <>
                 <div className="mb-8 text-left">
-                  <h1 className="text-2xl lg:text-3xl font-bold text-gray-900 mb-2 animate-fadeInUp">欢迎资讯久火外贸ERP</h1>
-                  <p className="text-gray-600">
+                  <h1 className="text-2xl font-bold text-[#194fe8] mb-2 animate-fadeInUp">欢迎资讯久火外贸ERP</h1>
+                  <p className="text-2xl font-bold text-[#194fe8]">
                     请完善信息，获取专属解决方案
                   </p>
                 </div>
@@ -295,7 +303,7 @@ const ErpInfoForm: React.FC<ErpInfoFormProps> = ({ isOpen, onClose }) => {
                   <div className="space-y-8 animate-fadeInUp" style={{animationDelay: "0.1s"}}>
                     {/* 身份选择 */}
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-3">
+                      <label className="block text-sm font-medium text-gray-700 mb-3 text-left">
                         您的身份是
                       </label>
                       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
@@ -321,7 +329,7 @@ const ErpInfoForm: React.FC<ErpInfoFormProps> = ({ isOpen, onClose }) => {
 
                     {/* 城市选择 */}
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-3">
+                      <label className="block text-sm font-medium text-gray-700 mb-3 text-left">
                         您所在的城市
                       </label>
                       <select
@@ -341,7 +349,7 @@ const ErpInfoForm: React.FC<ErpInfoFormProps> = ({ isOpen, onClose }) => {
 
                     {/* 服务选择 - 网格按钮样式 */}
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-3">
+                      <label className="block text-sm font-medium text-gray-700 mb-3 text-left">
                         您需要下列哪些服务（可多选）
                       </label>
                       <div className="grid grid-cols-3 gap-3">
@@ -379,7 +387,7 @@ const ErpInfoForm: React.FC<ErpInfoFormProps> = ({ isOpen, onClose }) => {
                   <div className="space-y-8 animate-fadeInUp" style={{animationDelay: "0.1s"}}>
                     {/* 公司名称 */}
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-3">
+                      <label className="block text-sm font-medium text-gray-700 mb-3 text-left">
                         公司名称
                       </label>
                       <div className="relative">
@@ -400,7 +408,7 @@ const ErpInfoForm: React.FC<ErpInfoFormProps> = ({ isOpen, onClose }) => {
 
                     {/* 联系人名称 */}
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-3">
+                      <label className="block text-sm font-medium text-gray-700 mb-3 text-left">
                         联系人名称
                       </label>
                       <div className="relative">
@@ -421,7 +429,7 @@ const ErpInfoForm: React.FC<ErpInfoFormProps> = ({ isOpen, onClose }) => {
 
                     {/* 电话号码 */}
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-3">
+                      <label className="block text-sm font-medium text-gray-700 mb-3 text-left">
                         电话号码
                       </label>
                       <div className="relative">
@@ -442,7 +450,7 @@ const ErpInfoForm: React.FC<ErpInfoFormProps> = ({ isOpen, onClose }) => {
 
                     {/* 公司类型 */}
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-3">
+                      <label className="block text-sm font-medium text-gray-700 mb-3 text-left">
                         公司类型
                       </label>
                       <div className="grid grid-cols-3 gap-3">
@@ -522,7 +530,7 @@ const ErpInfoForm: React.FC<ErpInfoFormProps> = ({ isOpen, onClose }) => {
                     <div className="w-5 h-5 bg-[#165DFF] rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
                       <Check className="w-3 h-3 text-white" />
                     </div>
-                    <span className="text-gray-700">
+                    <span className="text-gray-700 text-left">
                       覆盖30000+合作用户，2000+合作单位，20+知识产权保障
                     </span>
                   </li>
@@ -530,7 +538,7 @@ const ErpInfoForm: React.FC<ErpInfoFormProps> = ({ isOpen, onClose }) => {
                     <div className="w-5 h-5 bg-[#165DFF] rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
                       <Check className="w-3 h-3 text-white" />
                     </div>
-                    <span className="text-gray-700">
+                    <span className="text-gray-700 text-left">
                       支持基础版、专业版、企业版、旗舰版四种版本，适配不同发展阶段需求
                     </span>
                   </li>
@@ -538,7 +546,7 @@ const ErpInfoForm: React.FC<ErpInfoFormProps> = ({ isOpen, onClose }) => {
                     <div className="w-5 h-5 bg-[#165DFF] rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
                       <Check className="w-3 h-3 text-white" />
                     </div>
-                    <span className="text-gray-700">
+                    <span className="text-gray-700 text-left">
                       提供专业的实施团队，7*24小时技术支持，确保系统稳定运行
                     </span>
                   </li>
@@ -547,14 +555,23 @@ const ErpInfoForm: React.FC<ErpInfoFormProps> = ({ isOpen, onClose }) => {
               
               {/* 扫码添加专属顾问 */}
               <div className="mt-8">
-                <h4 className="text-base font-semibold text-gray-900 mb-4">扫码添加专属顾问</h4>
+                <h4 className="text-base font-semibold text-gray-900 mb-4 text-left">扫码添加专属顾问</h4>
                 <div className="flex justify-center">
                   <div className="w-32 h-32 bg-white rounded-lg flex items-center justify-center border border-gray-200 p-2">
                     <img 
-                      src="/qr-sales.png" 
-                      alt="销售顾问微信二维码" 
-                      className="w-full h-full object-contain"
+                      src="/WechatIMG3.jpg" 
+                      alt="微信客服二维码" 
+                      className="w-full h-full object-cover rounded-lg"
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement;
+                        target.style.display = 'none';
+                        const fallback = target.nextElementSibling as HTMLElement;
+                        if (fallback) fallback.style.display = 'flex';
+                      }}
                     />
+                    <div className="w-full h-full bg-gray-100 flex items-center justify-center rounded-lg" style={{display: 'none'}}>
+                      <span className="text-gray-500 text-xs text-left">二维码</span>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -563,11 +580,11 @@ const ErpInfoForm: React.FC<ErpInfoFormProps> = ({ isOpen, onClose }) => {
               <div className="mt-8">
                 <div className="flex items-center space-x-2 text-gray-700 mb-2">
                   <Phone className="w-4 h-4 text-[#165DFF]" />
-                  <span>全国服务热线：400-026-2606</span>
+                  <span className="text-left">全国服务热线：400-026-2606</span>
                 </div>
                 <div className="flex items-center space-x-2 text-gray-700">
                   <Globe className="w-4 h-4 text-[#165DFF]" />
-                  <span>官网：www.jiufire.com</span>
+                  <span className="text-left">官网：www.jiufire.com</span>
                 </div>
               </div>
             </div>

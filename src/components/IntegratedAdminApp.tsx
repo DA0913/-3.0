@@ -23,6 +23,10 @@ import NewsManagement from './NewsManagement';
 import CombinedCaseManagement from './CombinedCaseManagement';
 import VariantFormManagement from './VariantFormManagement';
 import ButtonFormManager from './ButtonFormManager';
+import PartnershipApplicationsManagement from './PartnershipApplicationsManagement';
+import SystemConfigManagement from './SystemConfigManagement';
+import AnalyticsDashboard from './AnalyticsDashboard';
+import UserManagement from './UserManagement';
 
 const IntegratedAdminApp: React.FC = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -39,10 +43,22 @@ const IntegratedAdminApp: React.FC = () => {
       description: '系统概览和统计'
     },
     {
+      id: 'analytics',
+      name: '数据统计',
+      icon: Award,
+      description: '网站访问数据统计分析'
+    },
+    {
       id: 'forms',
-      name: '表单管理',
+      name: '客户表单管理',
       icon: FileText,
       description: '客户提交表单管理'
+    },
+    {
+      id: 'partnership-applications',
+      name: '代理商申请管理',
+      icon: Briefcase,
+      description: '渠道合作申请管理'
     },
     {
       id: 'news',
@@ -107,7 +123,7 @@ const IntegratedAdminApp: React.FC = () => {
       db.logout();
       setIsAuthenticated(false);
     } finally {
-      setLoading(false);
+    setLoading(false);
     }
   };
 
@@ -123,8 +139,8 @@ const IntegratedAdminApp: React.FC = () => {
     } catch (error) {
       console.error('登出失败:', error);
       // 即使登出失败，也要清除本地状态
-      setIsAuthenticated(false);
-      setActiveTab('dashboard');
+    setIsAuthenticated(false);
+    setActiveTab('dashboard');
     }
   };
 
@@ -147,8 +163,12 @@ const IntegratedAdminApp: React.FC = () => {
     switch (activeTab) {
       case 'dashboard':
         return <DashboardContent />;
+      case 'analytics':
+        return <AnalyticsDashboard />;
       case 'forms':
         return <FormManagement />;
+      case 'partnership-applications':
+        return <PartnershipApplicationsManagement />;
       case 'news':
         return <NewsManagement />;
       case 'case-management':
@@ -160,7 +180,7 @@ const IntegratedAdminApp: React.FC = () => {
       case 'users':
         return <UserManagement />;
       case 'settings':
-        return <SystemSettings />;
+        return <SystemConfigManagement />;
       default:
         return <DashboardContent />;
     }
@@ -181,28 +201,28 @@ const IntegratedAdminApp: React.FC = () => {
         </div>
 
         <nav className="mt-8">
-          {menuItems.map((item) => (
-            <button
-              key={item.id}
-              onClick={() => {
-                setActiveTab(item.id);
-                setSidebarOpen(false);
-              }}
+            {menuItems.map((item) => (
+              <button
+                key={item.id}
+                onClick={() => {
+                  setActiveTab(item.id);
+                  setSidebarOpen(false);
+                }}
               className={`w-full flex items-center px-4 py-3 text-left transition-colors ${
-                activeTab === item.id
-                  ? 'bg-[#194fe8] text-white'
-                  : 'text-gray-700 hover:bg-gray-100'
-              }`}
-            >
-              <item.icon className="w-5 h-5 mr-3" />
+                  activeTab === item.id
+                    ? 'bg-[#194fe8] text-white'
+                    : 'text-gray-700 hover:bg-gray-100'
+                }`}
+              >
+                <item.icon className="w-5 h-5 mr-3" />
               <div>
-                <div className="font-medium">{item.name}</div>
+                  <div className="font-medium">{item.name}</div>
                 <div className={`text-xs ${activeTab === item.id ? 'text-blue-100' : 'text-gray-500'}`}>
-                  {item.description}
+                    {item.description}
+                  </div>
                 </div>
-              </div>
-            </button>
-          ))}
+              </button>
+            ))}
         </nav>
 
         {/* 退出登录 */}
@@ -222,22 +242,22 @@ const IntegratedAdminApp: React.FC = () => {
         {/* 顶部导航栏 */}
         <header className="bg-white shadow-sm border-b border-gray-200 h-16 flex items-center justify-between px-4">
           <div className="flex items-center">
-            <button
-              onClick={() => setSidebarOpen(true)}
+              <button
+                onClick={() => setSidebarOpen(true)}
               className="lg:hidden mr-4 text-gray-500 hover:text-gray-700"
-            >
-              <Menu className="w-6 h-6" />
-            </button>
+              >
+                <Menu className="w-6 h-6" />
+              </button>
             <h2 className="text-lg font-semibold text-gray-900">
-              {menuItems.find(item => item.id === activeTab)?.name}
+                  {menuItems.find(item => item.id === activeTab)?.name}
             </h2>
-          </div>
+            </div>
 
-          <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-4">
             <button className="text-gray-500 hover:text-gray-700">
               <Bell className="w-6 h-6" />
-            </button>
-            <div className="w-8 h-8 bg-[#194fe8] rounded-full flex items-center justify-center">
+              </button>
+              <div className="w-8 h-8 bg-[#194fe8] rounded-full flex items-center justify-center">
               <span className="text-white text-sm font-medium">A</span>
             </div>
           </div>
@@ -264,7 +284,7 @@ const IntegratedAdminApp: React.FC = () => {
 const DashboardContent: React.FC = () => {
   return (
     <div className="space-y-6">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
         <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-200">
           <div className="flex items-center justify-between">
             <div>
@@ -304,6 +324,18 @@ const DashboardContent: React.FC = () => {
         <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-200">
           <div className="flex items-center justify-between">
             <div>
+              <p className="text-sm text-gray-600">渠道申请</p>
+              <p className="text-2xl font-bold text-gray-900">12</p>
+            </div>
+            <div className="w-12 h-12 bg-indigo-100 rounded-lg flex items-center justify-center">
+              <Briefcase className="w-6 h-6 text-indigo-600" />
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-200">
+          <div className="flex items-center justify-between">
+            <div>
               <p className="text-sm text-gray-600">活跃用户</p>
               <p className="text-2xl font-bold text-gray-900">5</p>
             </div>
@@ -324,15 +356,7 @@ const DashboardContent: React.FC = () => {
   );
 };
 
-// 用户管理组件
-const UserManagement: React.FC = () => {
-  return (
-    <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-200">
-      <h3 className="text-lg font-semibold text-gray-900 mb-4">用户管理</h3>
-      <p className="text-gray-600">用户管理功能正在开发中...</p>
-    </div>
-  );
-};
+
 
 // 系统设置组件
 const SystemSettings: React.FC = () => {

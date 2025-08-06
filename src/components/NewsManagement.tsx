@@ -122,16 +122,16 @@ const NewsManagement: React.FC = () => {
     setSubmitError(null);
     
     try {
-              if (editingArticle) {
-          // 更新文章
+      if (editingArticle) {
+        // 更新文章
           const response = await db.updateNewsArticle(editingArticle.id, {
             ...formData,
             updated_at: new Date().toISOString()
           });
 
           if (response.error) throw new Error(response.error.message);
-        } else {
-          // 创建新文章
+      } else {
+        // 创建新文章
           const response = await db.createNewsArticle({
             ...formData,
             publish_time: new Date().toISOString(),
@@ -139,7 +139,7 @@ const NewsManagement: React.FC = () => {
           });
 
           if (response.error) throw new Error(response.error.message);
-        }
+      }
 
       await fetchArticles();
       resetForm();

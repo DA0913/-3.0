@@ -22,11 +22,19 @@ interface CustomerCase {
   company_size?: string;
   highlight_tags?: string[];
   company_description?: string;
+  // 新增显示控制字段
+  show_on_homepage?: boolean;
+  show_in_banner?: boolean;
+  show_in_partners?: boolean;
+  // 新增联系人信息字段
+  contact_avatar?: string;
+  contact_name?: string;
+  contact_position?: string;
 }
 
 // 预定义的默认数据（当数据库为空时使用）
 const DEFAULT_CASES: CustomerCase[] = [
-  {
+    {
     id: 'default-1',
     company_name: '太力',
     company_logo: '太力',
@@ -34,8 +42,8 @@ const DEFAULT_CASES: CustomerCase[] = [
     description: '太力，真空收纳专家，为全球亿万家庭塑造更美好的生活。',
     results: '使用久火ERP实现精细化管理，提升运营效率50%',
     image_url: '/tubuiao1 copy.png',
-    is_featured: true,
-    sort_order: 1,
+      is_featured: true,
+      sort_order: 1,
     status: 'active',
     created_at: '2024-01-15T10:00:00Z',
     updated_at: '2024-01-15T10:00:00Z',
@@ -55,7 +63,7 @@ const DEFAULT_CASES: CustomerCase[] = [
     results: '数字化建设提升效率40%',
     image_url: '/o2 copy.png',
     is_featured: false,
-    sort_order: 2,
+      sort_order: 2,
     status: 'active',
     created_at: '2024-01-14T10:00:00Z',
     updated_at: '2024-01-14T10:00:00Z',
@@ -75,7 +83,7 @@ const DEFAULT_CASES: CustomerCase[] = [
     results: '全球化运营效率提升35%',
     image_url: '/o3 copy.png',
     is_featured: false,
-    sort_order: 3,
+      sort_order: 3,
     status: 'active',
     created_at: '2024-01-13T10:00:00Z',
     updated_at: '2024-01-13T10:00:00Z',
@@ -95,7 +103,7 @@ const DEFAULT_CASES: CustomerCase[] = [
     results: '存储业务增长60%',
     image_url: '/o4 copy.png',
     is_featured: false,
-    sort_order: 4,
+      sort_order: 4,
     status: 'active',
     created_at: '2024-01-12T10:00:00Z',
     updated_at: '2024-01-12T10:00:00Z',
@@ -114,8 +122,8 @@ const DEFAULT_CASES: CustomerCase[] = [
     description: '办公品牌「齐心科技」：借助ERP实现精细管理',
     results: '办公用品管理效率提升45%',
     image_url: '/tubiao2 copy.png',
-    is_featured: false,
-    sort_order: 5,
+      is_featured: false,
+      sort_order: 5,
     status: 'active',
     created_at: '2024-01-11T10:00:00Z',
     updated_at: '2024-01-11T10:00:00Z',
@@ -125,17 +133,17 @@ const DEFAULT_CASES: CustomerCase[] = [
     company_description: '齐心集团是中国领先的办公用品和服务提供商。',
     highlight_tags: ['精细管理', '办公用品', '上市企业'],
     detail_url: ''
-  },
-  {
+    },
+    {
     id: 'default-6',
-    company_name: '纳思达',
+      company_name: '纳思达',
     company_logo: '纳思达',
-    industry: '制造业',
+      industry: '制造业',
     description: '上市公司「纳思达」：久火助力多系统一体管理',
     results: '多系统集成效率提升50%',
     image_url: '/tubiao3 copy.png',
-    is_featured: false,
-    sort_order: 6,
+      is_featured: false,
+      sort_order: 6,
     status: 'active',
     created_at: '2024-01-10T10:00:00Z',
     updated_at: '2024-01-10T10:00:00Z',
@@ -145,17 +153,17 @@ const DEFAULT_CASES: CustomerCase[] = [
     company_description: '纳思达是全球领先的打印机耗材制造商。',
     highlight_tags: ['多系统管理', '制造业', '一体化'],
     detail_url: ''
-  },
-  {
+    },
+    {
     id: 'default-7',
-    company_name: '健合集团',
+      company_name: '健合集团',
     company_logo: '健合',
     industry: '健康类',
     description: '全家庭营养与健康企业「健合集团」：携手久火提效',
     results: '健康产品管理效率提升40%',
     image_url: '/tibiao4 copy.png',
-    is_featured: false,
-    sort_order: 7,
+      is_featured: false,
+      sort_order: 7,
     status: 'active',
     created_at: '2024-01-09T10:00:00Z',
     updated_at: '2024-01-09T10:00:00Z',
@@ -165,17 +173,17 @@ const DEFAULT_CASES: CustomerCase[] = [
     company_description: '健合集团是中国领先的家庭营养与健康企业。',
     highlight_tags: ['营养健康', '家庭产品', '效率提升'],
     detail_url: ''
-  },
-  {
+    },
+    {
     id: 'default-8',
-    company_name: '倍轻松',
+      company_name: '倍轻松',
     company_logo: '倍轻松',
     industry: '3C类',
     description: '智能硬件品牌「倍轻松」：借助久火实现数字化管理',
     results: '智能硬件管理效率提升55%',
     image_url: '/image copy.png',
-    is_featured: false,
-    sort_order: 8,
+      is_featured: false,
+      sort_order: 8,
     status: 'active',
     created_at: '2024-01-08T10:00:00Z',
     updated_at: '2024-01-08T10:00:00Z',
@@ -211,7 +219,7 @@ const CustomerCasesPage: React.FC = () => {
       } else if (response.data && response.data.length > 0) {
         setCases(response.data);
         console.log('从数据库获取的案例数据:', response.data.length, '条');
-      } else {
+        } else {
         setCases(DEFAULT_CASES);
         console.log('使用默认案例数据');
       }
@@ -228,9 +236,13 @@ const CustomerCasesPage: React.FC = () => {
     fetchCases();
   }, []);
 
-  // 简化数据处理，避免过度优化
-  const featuredCases = cases.filter(case_ => case_.is_featured);
-  const regularCases = cases.filter(case_ => !case_.is_featured);
+  // 根据新的显示逻辑处理数据
+  const bannerCases = cases.filter(case_ => case_.show_in_banner);
+  const partnerCases = cases.filter(case_ => case_.show_in_partners);
+  
+  // 兼容旧逻辑：如果没有设置新的显示字段，使用is_featured
+  const featuredCases = bannerCases.length > 0 ? bannerCases : cases.filter(case_ => case_.is_featured);
+  const regularCases = partnerCases.length > 0 ? partnerCases : cases.filter(case_ => !case_.is_featured);
 
   // 安全的索引获取
   const safeFeaturedIndex = featuredCases.length > 0 ? Math.min(currentFeaturedIndex, featuredCases.length - 1) : 0;
@@ -265,7 +277,7 @@ const CustomerCasesPage: React.FC = () => {
     if (featuredCases.length > 1) {
       const interval = setInterval(nextFeatured, 5000); // 5秒自动切换
       return () => clearInterval(interval);
-    }
+  }
   }, [featuredCases.length]);
 
   // 加载状态
@@ -295,22 +307,32 @@ const CustomerCasesPage: React.FC = () => {
   return (
     <div className="min-h-screen bg-white">
       {/* 顶部标题区域 */}
-      <div className="bg-gray-50 pt-32 pb-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-4xl lg:text-5xl font-bold text-gray-900 leading-tight mb-4">
-            倾听企业故事，探寻出海方案最优解
-          </h1>
-          <p className="text-lg text-gray-600 leading-relaxed max-w-4xl mx-auto">
-            链接久火ERP，共创您的品牌出海新高度
-          </p>
+      <section className="relative min-h-[500px] flex items-center overflow-hidden py-16 w-full">
+        <div className="absolute inset-0">
+          <img
+            src="/kehu(1).png"
+            alt="客户案例背景"
+            className="w-full h-full object-cover object-center"
+            loading="lazy"
+          />
         </div>
-      </div>
+        <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
+          <div className="text-center">
+            <h1 className="text-4xl lg:text-5xl font-bold text-gray-900 leading-tight mb-4">
+              倾听企业故事，探寻出海方案最优解
+            </h1>
+            <p className="text-lg text-gray-600 leading-relaxed max-w-4xl mx-auto">
+              链接久火ERP，共创您的品牌出海新高度
+            </p>
+          </div>
+        </div>
+      </section>
 
       {/* 主要案例展示区域 */}
       {currentFeaturedCase && (
         <div className="bg-white py-16">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="relative">
+                <div className="relative">
               <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-2xl overflow-hidden">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
                   {/* 左侧图片 */}
@@ -320,21 +342,21 @@ const CustomerCasesPage: React.FC = () => {
                         src={currentFeaturedCase.image_url}
                         alt={currentFeaturedCase.company_name}
                         className="w-full h-full object-cover"
-                      />
+                  />
                                          ) : (
                        <div className="w-full h-full bg-gradient-to-br from-blue-100 to-purple-100 flex items-center justify-center">
                          <div className="text-gray-600 font-bold text-4xl">
                            {currentFeaturedCase.company_name}
                          </div>
-                       </div>
-                     )}
-                    
+                    </div>
+                  )}
+                
                     {/* 股票代码标识 */}
                     <div className="absolute bottom-4 left-4 bg-red-500 text-white px-3 py-1 rounded text-sm font-medium">
                       股票代码：301595
                     </div>
                   </div>
-
+                  
                   {/* 右侧内容 */}
                   <div className="p-8 lg:p-12">
                     {/* 公司规模标签 */}
@@ -348,7 +370,7 @@ const CustomerCasesPage: React.FC = () => {
  
                      <p className="text-lg text-gray-600 leading-relaxed mb-8">
                        {currentFeaturedCase.case_summary || currentFeaturedCase.description}
-                     </p>
+                    </p>
 
                     <button className="inline-flex items-center px-6 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors">
                       查看详情
@@ -357,7 +379,7 @@ const CustomerCasesPage: React.FC = () => {
                   </div>
                 </div>
               </div>
-
+              
               {/* 轮播控制按钮 */}
               {featuredCases.length > 1 && (
                 <>
@@ -389,8 +411,8 @@ const CustomerCasesPage: React.FC = () => {
                     }`}
                   />
                 ))}
-              </div>
-            )}
+          </div>
+        )}
           </div>
         </div>
       )}
@@ -406,7 +428,7 @@ const CustomerCasesPage: React.FC = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-12">
             {currentCases.map((case_) => (
               <div
-                key={case_.id}
+                key={case_.id} 
                 className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow overflow-hidden group"
               >
                 {/* 案例图片 */}
@@ -422,8 +444,8 @@ const CustomerCasesPage: React.FC = () => {
                        <div className="text-gray-600 font-bold text-xl">
                          {case_.company_name}
                        </div>
-                     </div>
-                   )}
+                    </div>
+                  )}
 
                   
                 </div>
@@ -445,15 +467,39 @@ const CustomerCasesPage: React.FC = () => {
                     </span>
                   </div>
 
-                  {/* 查看详情按钮 */}
-                  <button className="w-full text-left text-blue-600 hover:text-blue-700 text-sm font-medium flex items-center justify-between group">
-                    查看详情
-                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                  </button>
+                  {/* 联系人信息 */}
+                  <div className="border-t pt-3 mt-3">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center space-x-3">
+                        <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center overflow-hidden">
+                          {case_.contact_avatar ? (
+                            <img
+                              src={case_.contact_avatar}
+                              alt={case_.contact_name || '联系人'}
+                              className="w-full h-full object-cover"
+                            />
+                          ) : (
+                            <span className="text-blue-600 font-medium text-sm">
+                              {(case_.contact_name || case_.company_name).charAt(0)}
+                            </span>
+                          )}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="text-sm font-medium text-gray-900 truncate">
+                            {case_.contact_name || case_.company_name + '负责人'}
+                          </div>
+                          <div className="text-xs text-gray-500 truncate">
+                            {case_.contact_position || '企业负责人'}
+                          </div>
+                        </div>
+                      </div>
+                      <ArrowRight className="w-4 h-4 text-gray-400 flex-shrink-0" />
+                    </div>
+                  </div>
                 </div>
               </div>
             ))}
-          </div>
+        </div>
 
           {/* 分页器 */}
           {totalPages > 1 && (
@@ -462,8 +508,8 @@ const CustomerCasesPage: React.FC = () => {
               <div className="flex flex-col sm:flex-row items-center justify-center space-y-2 sm:space-y-0 sm:space-x-4 text-sm text-gray-600">
                 <span>第 {((currentPage - 1) * casesPerPage) + 1}-{Math.min(currentPage * casesPerPage, regularCases.length)} 条，共 {regularCases.length} 条</span>
                 <span>共 {totalPages} 页</span>
-              </div>
-              
+          </div>
+
               {/* 分页按钮 */}
               <div className="flex flex-wrap justify-center items-center gap-2">
                 <button

@@ -43,6 +43,18 @@ export type CustomerCase = {
   status: 'active' | 'inactive';
   created_at: string;
   updated_at: string;
+  // 新增字段
+  image_url?: string;
+  case_title?: string;
+  case_summary?: string;
+  detail_url?: string;
+  company_size?: string;
+  highlight_tags?: string[];
+  company_description?: string;
+  // 显示控制字段
+  show_on_homepage?: boolean;
+  show_in_banner?: boolean;
+  show_in_partners?: boolean;
 };
 
 export type CaseConfiguration = {
@@ -111,7 +123,7 @@ const getApiBaseUrl = () => {
     console.warn('VITE_API_BASE_URL not configured, using default localhost:3000');
     return 'http://localhost:3000/api';
   }
-  return baseUrl;
+  return `${baseUrl}/api`;
 };
 
 // API客户端类

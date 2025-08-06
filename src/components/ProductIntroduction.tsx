@@ -187,7 +187,7 @@ const ProductIntroduction = () => {
                 <span className="text-sm font-medium text-gray-700">产品介绍</span>
               </div>
               
-              <h1 className="text-4xl lg:text-5xl font-bold text-gray-900 leading-tight">
+              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 leading-snug break-words max-w-2xl">
                 为外贸企业打造全链路管理系统
               </h1>
               
@@ -313,12 +313,19 @@ const ProductIntroduction = () => {
                 12大核心模块，覆盖企业全业务流程，立即开启数字化转型之旅
               </p>
               <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
-                <button className="bg-white text-[#194fe8] hover:bg-gray-100 font-medium py-2.5 sm:py-3 px-6 sm:px-8 rounded-lg transition-all duration-200 text-sm sm:text-base">
+                <FormButton 
+                  buttonId="btn-1"
+                  className="bg-white text-[#194fe8] hover:bg-gray-100 font-medium py-2.5 sm:py-3 px-6 sm:px-8 rounded-lg transition-all duration-200 text-sm sm:text-base"
+                >
                   免费试用30天
-                </button>
-                <button className="border border-white text-white hover:bg-white hover:text-[#194fe8] font-medium py-2.5 sm:py-3 px-6 sm:px-8 rounded-lg transition-all duration-200 text-sm sm:text-base">
+                </FormButton>
+                <FormButton 
+                  variant="outline"
+                  buttonId="btn-5"
+                  className="border border-white text-white hover:bg-white hover:text-[#194fe8] font-medium py-2.5 sm:py-3 px-6 sm:px-8 rounded-lg transition-all duration-200 text-sm sm:text-base"
+                >
                   预约产品演示
-                </button>
+                </FormButton>
               </div>
             </div>
           </div>

@@ -7,6 +7,7 @@ import {
   AlertCircle,
   Loader2
 } from 'lucide-react';
+import { db } from '../lib/database';
 
 interface ImageUploaderProps {
   value: string;
@@ -40,36 +41,50 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({
       setError(`文件大小不能超过 ${maxSize}MB`);
       return;
     }
-
+    
     // 本地预览
-    const reader = new FileReader();
-    reader.onload = (e) => {
+      const reader = new FileReader();
+      reader.onload = (e) => {
       const localUrl = e.target?.result as string;
       setPreview(localUrl);
-    };
-    reader.readAsDataURL(file);
-
+      };
+      reader.readAsDataURL(file);
+      
     setIsUploading(true);
     try {
       const formData = new FormData();
       formData.append('image', file);
-      const apiBase = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000/api';
-      const res = await fetch(`${apiBase}/upload`, {
+      
+      // 使用统一的数据库客户端获取API基础URL和认证令牌
+      const apiBase = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000';
+      const authToken = db.getAuthToken();
+      
+      const headers: Record<string, string> = {};
+      if (authToken) {
+        headers['Authorization'] = `Bearer ${authToken}`;
+      }
+      
+      const res = await fetch(`${apiBase}/api/upload`, {
         method: 'POST',
         body: formData,
-        headers: {
-          Authorization: localStorage.getItem('auth_token') ? `Bearer ${localStorage.getItem('auth_token')}` : ''
-        }
+        headers
       });
+      
+      if (!res.ok) {
+        const errorData = await res.json();
+        throw new Error(errorData.error || `HTTP Error: ${res.status}`);
+      }
+      
       const data = await res.json();
       if (data.url) {
         onChange(data.url); // 使用服务器返回的URL
         setPreview('');
       } else {
-        setError(data.error || '上传失败');
+        setError('上传失败：服务器未返回URL');
       }
     } catch (err) {
-      setError('上传失败，请重试');
+      console.error('图片上传失败:', err);
+      setError(err instanceof Error ? err.message : '上传失败，请重试');
     } finally {
       setIsUploading(false);
     }

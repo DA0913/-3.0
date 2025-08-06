@@ -16,6 +16,7 @@ import {
   ChevronUp,
   ArrowRight
 } from 'lucide-react';
+import FormButton from './FormButton';
 
 const ModulesInterface = () => {
   const [expandedModule, setExpandedModule] = useState<number | null>(null);
@@ -112,7 +113,7 @@ const ModulesInterface = () => {
   };
 
   return (
-    <section id="modules" className="py-12 sm:py-16 lg:py-24 bg-gray-50 w-full">
+    <section id="modules" className="py-12 sm:py-16 lg:py-24 w-full bg-cover bg-center bg-no-repeat" style={{backgroundImage: 'url(/beij1.png)'}}>
       <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-8 sm:mb-12 lg:mb-16">
@@ -205,12 +206,19 @@ const ModulesInterface = () => {
               12大核心模块，覆盖企业全业务流程，立即开启数字化转型之旅
             </p>
             <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
-              <button className="bg-white text-[#194fe8] hover:bg-gray-100 font-medium py-2.5 sm:py-3 px-6 sm:px-8 rounded-lg transition-all duration-200 text-sm sm:text-base">
+              <FormButton 
+                buttonId="btn-1"
+                className="bg-white text-[#194fe8] hover:bg-gray-100 font-medium py-2.5 sm:py-3 px-6 sm:px-8 rounded-lg transition-all duration-200 text-sm sm:text-base"
+              >
                 免费试用30天
-              </button>
-              <button className="border border-white text-white hover:bg-white hover:text-[#194fe8] font-medium py-2.5 sm:py-3 px-6 sm:px-8 rounded-lg transition-all duration-200 text-sm sm:text-base">
+              </FormButton>
+              <FormButton 
+                variant="outline"
+                buttonId="btn-5"
+                className="border border-white text-white hover:bg-white hover:text-[#194fe8] font-medium py-2.5 sm:py-3 px-6 sm:px-8 rounded-lg transition-all duration-200 text-sm sm:text-base"
+              >
                 预约产品演示
-              </button>
+              </FormButton>
             </div>
           </div>
         </div>

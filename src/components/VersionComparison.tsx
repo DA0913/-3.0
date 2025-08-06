@@ -499,12 +499,13 @@ const VersionComparison = () => {
               <FormButton className="bg-white text-[#194fe8] hover:bg-gray-100">
                 免费咨询方案
               </FormButton>
-              <button 
+              <FormButton 
+                variant="outline"
+                buttonId="btn-5"
                 className="border-2 border-white text-white hover:bg-white hover:text-[#194fe8] bg-transparent font-semibold py-3 px-6 rounded-lg transition-all duration-200 flex items-center justify-center space-x-2"
-                style={{ color: 'white !important' }}
               >
                 预约产品演示
-              </button>
+              </FormButton>
             </div>
           </div>
         </div>

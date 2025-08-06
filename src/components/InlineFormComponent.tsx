@@ -21,14 +21,9 @@ const InlineFormComponent: React.FC<InlineFormComponentProps> = ({
   const [submitSuccess, setSubmitSuccess] = useState(false);
 
   const companyTypeOptions = [
-    { value: 'trading', label: '贸易公司' },
-    { value: 'manufacturing', label: '制造企业' },
-    { value: 'service', label: '服务企业' },
-    { value: 'retail', label: '零售企业' },
-    { value: 'wholesale', label: '批发企业' },
-    { value: 'ecommerce', label: '电商企业' },
-    { value: 'logistics', label: '物流企业' },
-    { value: 'other', label: '其他' }
+    { value: 'factory', label: '工厂' },
+    { value: 'trader', label: '贸易商' },
+    { value: 'integrated', label: '工贸一体' }
   ];
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -102,13 +97,13 @@ const InlineFormComponent: React.FC<InlineFormComponentProps> = ({
     try {
       // 使用新的数据库客户端提交表单
       const response = await db.createFormSubmission({
-        company_name: formData.companyName,
-        user_name: formData.userName,
-        phone: formData.phone,
-        company_types: formData.companyTypes,
-        source_url: window.location.href,
+            company_name: formData.companyName,
+            user_name: formData.userName,
+            phone: formData.phone,
+            company_types: formData.companyTypes,
+            source_url: window.location.href,
         submitted_at: new Date().toISOString(),
-        status: 'pending'
+            status: 'pending'
       });
 
       if (response.error) {
@@ -146,7 +141,7 @@ const InlineFormComponent: React.FC<InlineFormComponentProps> = ({
           errorMessage = '请填写所有必填字段';
         } else if (error.message.includes('Database')) {
           errorMessage = '系统暂时不可用，请稍后重试';
-        } else {
+      } else {
           errorMessage = error.message;
         }
       }
@@ -181,48 +176,48 @@ const InlineFormComponent: React.FC<InlineFormComponentProps> = ({
           填写下方信息，我们的专家将为您提供定制化方案
         </p>
       </div>
-
+      
       <form onSubmit={handleSubmit} className="space-y-4">
         {/* 公司名称和姓名并排 */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
+        <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
               公司名称 *
             </label>
-            <input
-              type="text"
-              name="companyName"
-              value={formData.companyName}
-              onChange={handleInputChange}
+          <input
+            type="text"
+            name="companyName"
+            value={formData.companyName}
+            onChange={handleInputChange}
               className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-[#194fe8] focus:border-transparent transition-colors ${
-                errors.companyName ? 'border-red-300' : 'border-gray-300'
+              errors.companyName ? 'border-red-300' : 'border-gray-300'
               }`}
               placeholder="请输入公司名称"
-              disabled={isSubmitting}
-            />
-            {errors.companyName && (
+            disabled={isSubmitting}
+          />
+          {errors.companyName && (
               <p className="mt-1 text-sm text-red-600">{errors.companyName}</p>
-            )}
-          </div>
+          )}
+        </div>
 
-          <div>
+        <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
               联系人姓名 *
             </label>
-            <input
-              type="text"
-              name="userName"
-              value={formData.userName}
-              onChange={handleInputChange}
+          <input
+            type="text"
+            name="userName"
+            value={formData.userName}
+            onChange={handleInputChange}
               className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-[#194fe8] focus:border-transparent transition-colors ${
                 errors.userName ? 'border-red-300' : 'border-gray-300'
               }`}
-              placeholder="请输入您的姓名"
-              disabled={isSubmitting}
-            />
-            {errors.userName && (
+            placeholder="请输入您的姓名"
+            disabled={isSubmitting}
+          />
+          {errors.userName && (
               <p className="mt-1 text-sm text-red-600">{errors.userName}</p>
-            )}
+          )}
           </div>
         </div>
 
@@ -246,7 +241,7 @@ const InlineFormComponent: React.FC<InlineFormComponentProps> = ({
             <p className="mt-1 text-sm text-red-600">{errors.phone}</p>
           )}
         </div>
-
+        
         {/* 公司类型 */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-3">
@@ -277,7 +272,7 @@ const InlineFormComponent: React.FC<InlineFormComponentProps> = ({
             <p className="mt-1 text-sm text-red-600">{errors.companyTypes}</p>
           )}
         </div>
-
+        
         {/* 提交错误提示 */}
         {errors.submit && (
           <div className="p-3 bg-red-50 border border-red-200 rounded-lg">
@@ -287,7 +282,7 @@ const InlineFormComponent: React.FC<InlineFormComponentProps> = ({
             </p>
           </div>
         )}
-
+        
         {/* 提交按钮 */}
         <button
           type="submit"

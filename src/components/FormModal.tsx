@@ -40,14 +40,9 @@ const FormModal: React.FC<FormModalProps> = ({
   const [submitSuccess, setSubmitSuccess] = useState(false);
 
   const companyTypeOptions = [
-    { value: 'trading', label: '贸易公司' },
-    { value: 'manufacturing', label: '制造企业' },
-    { value: 'service', label: '服务企业' },
-    { value: 'retail', label: '零售企业' },
-    { value: 'wholesale', label: '批发企业' },
-    { value: 'ecommerce', label: '电商企业' },
-    { value: 'logistics', label: '物流企业' },
-    { value: 'other', label: '其他' }
+    { value: 'factory', label: '工厂' },
+    { value: 'trader', label: '贸易商' },
+    { value: 'integrated', label: '工贸一体' }
   ];
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -121,13 +116,13 @@ const FormModal: React.FC<FormModalProps> = ({
     try {
       // 使用新的数据库客户端提交表单
       const response = await db.createFormSubmission({
-        company_name: formData.companyName,
-        user_name: formData.userName,
-        phone: formData.phone,
-        company_types: formData.companyTypes,
-        source_url: sourceUrl || window.location.href,
+            company_name: formData.companyName,
+            user_name: formData.userName,
+            phone: formData.phone,
+            company_types: formData.companyTypes,
+            source_url: sourceUrl || window.location.href,
         submitted_at: new Date().toISOString(),
-        status: 'pending'
+            status: 'pending'
       });
 
       if (response.error) {
@@ -169,7 +164,7 @@ const FormModal: React.FC<FormModalProps> = ({
           errorMessage = '请填写所有必填字段';
         } else if (error.message.includes('Database')) {
           errorMessage = '系统暂时不可用，请稍后重试';
-        } else {
+      } else {
           errorMessage = error.message;
         }
       }
@@ -215,16 +210,16 @@ const FormModal: React.FC<FormModalProps> = ({
                 <div>
                   <h3 className="text-lg font-semibold text-gray-900">{title}</h3>
                   <p className="text-sm text-gray-600 mt-1">{description}</p>
-                </div>
-                <button
+            </div>
+            <button
                   onClick={onClose}
                   className="text-gray-400 hover:text-gray-600 transition-colors"
-                >
+            >
                   <X className="w-6 h-6" />
-                </button>
-              </div>
+            </button>
+          </div>
 
-              {/* 表单内容 */}
+          {/* 表单内容 */}
               <form onSubmit={handleSubmit} className="p-6 space-y-6">
                 {/* 公司名称 */}
                 <div>
@@ -322,7 +317,7 @@ const FormModal: React.FC<FormModalProps> = ({
                   {errors.companyTypes && (
                     <p className="mt-1 text-sm text-red-600">{errors.companyTypes}</p>
                   )}
-                </div>
+              </div>
 
                 {/* 提交错误提示 */}
                 {errors.submit && (

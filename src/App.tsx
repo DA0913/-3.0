@@ -3,7 +3,6 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import Header from './components/Header';
 import Hero from './components/Hero';
 import ModulesInterface from './components/ModulesInterface';
-import TrustSection from './components/TrustSection';
 import Services from './components/Services';
 import Footer from './components/Footer';
 import ProductIntroduction from './components/ProductIntroduction';
@@ -14,8 +13,10 @@ import AboutPage from './components/AboutPage';
 import FloatingNav from './components/FloatingNav';
 import IntegratedAdminApp from './components/IntegratedAdminApp';
 import FormButton from './components/FormButton';
-import PartnershipSection from './components/PartnershipSection';
 import FeatureModulesContainer from './components/FeatureModulesContainer';
+import HomepageCustomerCases from './components/HomepageCustomerCases';
+import PartnerSupport from './components/PartnerSupport';
+import CustomerServiceButton from './components/CustomerServiceButton';
 
 function MainApp() {
   const [currentPage, setCurrentPage] = useState('home');
@@ -28,9 +29,9 @@ function MainApp() {
           <Hero />
           <ModulesInterface />
           <FeatureModulesContainer />
-          <TrustSection />
+          <HomepageCustomerCases />
           <Services />
-          <PartnershipSection />
+          <PartnerSupport />
           <Footer />
         </>
       ) : currentPage === 'product' ? (
@@ -59,6 +60,9 @@ function MainApp() {
           <Footer />
         </>
       ) : null}
+      
+      {/* 客服咨询按钮 */}
+      <CustomerServiceButton onClick={() => {}} />
     </div>
   );
 }

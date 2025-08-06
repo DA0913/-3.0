@@ -203,8 +203,8 @@ const AboutPage = () => {
 
             <div className="relative">
               <img
-                src="/657c8a961966b29d59741182e0ff9d51a8a3514f3b7d40-W7QSBs.jpeg"
-                alt="公司团队"
+                src="/beiji6.png"
+                alt="现代玻璃建筑"
                 className="w-full h-96 object-cover rounded-2xl shadow-lg"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-2xl"></div>
@@ -213,56 +213,7 @@ const AboutPage = () => {
         </div>
       </section>
 
-      {/* 发展历程 */}
-      <section className="py-24 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">
-              发展历程
-            </h2>
-            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-              从初创到行业领先，见证我们与客户共同成长的每一步
-            </p>
-          </div>
-
-          <div className="relative">
-            {/* 时间线 */}
-            <div className="absolute left-1/2 transform -translate-x-1/2 h-full w-1 bg-[#194fe8]"></div>
-            
-            <div className="space-y-16">
-              {milestones.map((milestone, index) => (
-                <div
-                  key={index}
-                  className={`flex items-center ${
-                    index % 2 === 0 ? 'flex-row' : 'flex-row-reverse'
-                  }`}
-                >
-                  <div className={`w-1/2 ${index % 2 === 0 ? 'pr-8 text-right' : 'pl-8'}`}>
-                    <div className="bg-white rounded-lg p-6 shadow-md border border-gray-200">
-                      <div className="flex items-center space-x-3 mb-3">
-                        <milestone.icon className="w-6 h-6 text-[#194fe8]" />
-                        <h3 className="text-xl font-semibold text-gray-900">
-                          {milestone.title}
-                        </h3>
-                      </div>
-                      <p className="text-gray-600">
-                        {milestone.description}
-                      </p>
-                    </div>
-                  </div>
-                  
-                  {/* 时间节点 */}
-                  <div className="relative z-10 w-16 h-16 bg-[#194fe8] rounded-full flex items-center justify-center text-white font-bold">
-                    {milestone.year}
-                  </div>
-                  
-                  <div className="w-1/2"></div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* 发展历程模块已删除 */}
 
       {/* 核心团队 */}
       <section className="py-24 bg-white">

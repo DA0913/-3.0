@@ -362,64 +362,153 @@ const ButtonFormManager: React.FC = () => {
     <div className="space-y-6">
       {/* 统计卡片 */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-200">
-          <div className="flex items-center justify-between">
+        <div className="bg-white rounded-sm p-8 shadow-sm border border-gray-200 min-h-[140px]">
+          <div className="flex items-center justify-between h-full">
             <div>
-              <p className="text-sm text-gray-600">总映射数</p>
-              <p className="text-2xl font-bold text-gray-900">{mappings.length}</p>
+              <p className="text-sm text-gray-600 mb-2">总映射数</p>
+              <p className="text-3xl font-bold text-gray-900">{mappings.length}</p>
+              <p className="text-xs text-gray-500 mt-2">已配置映射关系</p>
             </div>
-            <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-              <Workflow className="w-6 h-6 text-blue-600" />
+            <div className="w-16 h-16 bg-blue-100 rounded-sm flex items-center justify-center">
+              <Workflow className="w-8 h-8 text-blue-600" />
             </div>
           </div>
         </div>
         
-        <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-200">
-          <div className="flex items-center justify-between">
+        <div className="bg-white rounded-sm p-8 shadow-sm border border-gray-200 min-h-[140px]">
+          <div className="flex items-center justify-between h-full">
             <div>
-              <p className="text-sm text-gray-600">激活映射</p>
-              <p className="text-2xl font-bold text-green-600">
+              <p className="text-sm text-gray-600 mb-2">激活映射</p>
+              <p className="text-3xl font-bold text-green-600">
                 {mappings.filter((m: ButtonFormMapping) => m.is_active).length}
               </p>
+              <p className="text-xs text-gray-500 mt-2">正在运行中</p>
             </div>
-            <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
-              <CheckCircle className="w-6 h-6 text-green-600" />
+            <div className="w-16 h-16 bg-green-100 rounded-sm flex items-center justify-center">
+              <CheckCircle className="w-8 h-8 text-green-600" />
             </div>
           </div>
         </div>
         
-        <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-200">
-          <div className="flex items-center justify-between">
+        <div className="bg-white rounded-sm p-8 shadow-sm border border-gray-200 min-h-[140px]">
+          <div className="flex items-center justify-between h-full">
             <div>
-              <p className="text-sm text-gray-600">可用按钮</p>
-              <p className="text-2xl font-bold text-purple-600">
+              <p className="text-sm text-gray-600 mb-2">可用按钮</p>
+              <p className="text-3xl font-bold text-purple-600">
                 {buttonConfigs.length}
               </p>
+              <p className="text-xs text-gray-500 mt-2">待配置按钮</p>
             </div>
-            <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
-              <FileText className="w-6 h-6 text-purple-600" />
+            <div className="w-16 h-16 bg-purple-100 rounded-sm flex items-center justify-center">
+              <FileText className="w-8 h-8 text-purple-600" />
             </div>
           </div>
         </div>
         
-        <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-200">
-          <div className="flex items-center justify-between">
+        <div className="bg-white rounded-sm p-8 shadow-sm border border-gray-200 min-h-[140px]">
+          <div className="flex items-center justify-between h-full">
             <div>
-              <p className="text-sm text-gray-600">可用表单</p>
-              <p className="text-2xl font-bold text-orange-600">
+              <p className="text-sm text-gray-600 mb-2">可用表单</p>
+              <p className="text-3xl font-bold text-orange-600">
                 {formConfigs.length}
               </p>
+              <p className="text-xs text-gray-500 mt-2">表单模板数</p>
             </div>
-            <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center">
-              <Link className="w-6 h-6 text-orange-600" />
+            <div className="w-16 h-16 bg-orange-100 rounded-sm flex items-center justify-center">
+              <Link className="w-8 h-8 text-orange-600" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* 数据图表概览 */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="bg-white rounded-sm p-8 shadow-sm border border-gray-200 min-h-[300px]">
+          <div className="flex items-center justify-between mb-6">
+            <h3 className="text-lg font-semibold text-gray-900">模块分布统计</h3>
+            <div className="text-sm text-gray-500">最近30天</div>
+          </div>
+          <div className="space-y-4">
+            {availableModules.map((module, index) => {
+              const count = mappings.filter(m => m.module_name === module.value).length;
+              const percentage = mappings.length > 0 ? (count / mappings.length) * 100 : 0;
+              return (
+                <div key={module.value} className="flex items-center justify-between p-4 bg-gray-50 rounded-sm">
+                  <div className="flex items-center space-x-3">
+                    <div className={`w-3 h-3 rounded-full ${
+                      index % 4 === 0 ? 'bg-blue-500' :
+                      index % 4 === 1 ? 'bg-green-500' :
+                      index % 4 === 2 ? 'bg-purple-500' : 'bg-orange-500'
+                    }`}></div>
+                    <span className="text-sm font-medium text-gray-700">{module.label}</span>
+                  </div>
+                  <div className="flex items-center space-x-3">
+                    <div className="w-24 bg-gray-200 rounded-sm h-2">
+                      <div 
+                        className={`h-2 rounded-sm ${
+                          index % 4 === 0 ? 'bg-blue-500' :
+                          index % 4 === 1 ? 'bg-green-500' :
+                          index % 4 === 2 ? 'bg-purple-500' : 'bg-orange-500'
+                        }`}
+                        style={{ width: `${percentage}%` }}
+                      ></div>
+                    </div>
+                    <span className="text-sm text-gray-600 w-8">{count}</span>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+        
+        <div className="bg-white rounded-sm p-8 shadow-sm border border-gray-200 min-h-[300px]">
+          <div className="flex items-center justify-between mb-6">
+            <h3 className="text-lg font-semibold text-gray-900">映射状态分析</h3>
+            <div className="text-sm text-gray-500">实时数据</div>
+          </div>
+          <div className="space-y-6">
+            <div className="text-center">
+              <div className="relative w-32 h-32 mx-auto mb-4">
+                <div className="w-full h-full rounded-full border-8 border-gray-200"></div>
+                <div 
+                  className="absolute top-0 left-0 w-full h-full rounded-full border-8 border-green-500 transform rotate-45"
+                  style={{
+                    borderTopColor: 'transparent',
+                    borderRightColor: 'transparent',
+                    transform: `rotate(${(mappings.filter(m => m.is_active).length / Math.max(mappings.length, 1)) * 360}deg)`
+                  }}
+                ></div>
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="text-center">
+                    <div className="text-2xl font-bold text-gray-900">
+                      {mappings.length > 0 ? Math.round((mappings.filter(m => m.is_active).length / mappings.length) * 100) : 0}%
+                    </div>
+                    <div className="text-xs text-gray-500">激活率</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="text-center p-4 bg-green-50 rounded-sm border border-green-200">
+                <div className="text-lg font-bold text-green-600">
+                  {mappings.filter(m => m.is_active).length}
+                </div>
+                <div className="text-xs text-green-700">激活映射</div>
+              </div>
+              <div className="text-center p-4 bg-gray-50 rounded-sm border border-gray-200">
+                <div className="text-lg font-bold text-gray-600">
+                  {mappings.filter(m => !m.is_active).length}
+                </div>
+                <div className="text-xs text-gray-700">停用映射</div>
+              </div>
             </div>
           </div>
         </div>
       </div>
 
       {/* 操作栏 */}
-      <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-200">
-        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between space-y-4 lg:space-y-0 lg:space-x-4">
+      <div className="bg-white rounded-sm p-8 shadow-sm border border-gray-200 min-h-[120px]">
+        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between space-y-4 lg:space-y-0 lg:space-x-4 h-full">
           <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 flex-1">
             <div className="relative flex-1 max-w-md">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
@@ -428,29 +517,40 @@ const ButtonFormManager: React.FC = () => {
                 placeholder="搜索按钮或表单名称..."
                 value={searchTerm}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#194fe8] focus:border-transparent"
+                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-sm focus:ring-2 focus:ring-[#194fe8] focus:border-transparent"
               />
             </div>
 
             <select
               value={moduleFilter}
               onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setModuleFilter(e.target.value)}
-              className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#194fe8] focus:border-transparent"
+              className="px-4 py-3 border border-gray-300 rounded-sm focus:ring-2 focus:ring-[#194fe8] focus:border-transparent min-w-[140px]"
             >
               <option value="all">全部模块</option>
               {availableModules.map(module => (
                 <option key={module.value} value={module.value}>{module.label}</option>
               ))}
             </select>
+            
+            <button className="flex items-center space-x-2 bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-3 rounded-sm transition-colors">
+              <Filter className="w-5 h-5" />
+              <span>高级筛选</span>
+            </button>
           </div>
 
+          <div className="flex items-center space-x-3">
+            <button className="flex items-center space-x-2 bg-white hover:bg-gray-50 text-gray-700 px-4 py-3 rounded-sm border border-gray-300 transition-colors">
+              <Settings className="w-5 h-5" />
+              <span>配置管理</span>
+            </button>
           <button
             onClick={() => setShowEditor(true)}
-            className="flex items-center space-x-2 bg-[#194fe8] hover:bg-[#1640c7] text-white px-4 py-2 rounded-lg transition-colors"
+              className="flex items-center space-x-2 bg-[#194fe8] hover:bg-[#1640c7] text-white px-6 py-3 rounded-sm transition-colors"
           >
             <Plus className="w-5 h-5" />
             <span>新建映射</span>
           </button>
+          </div>
         </div>
       </div>
 

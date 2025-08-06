@@ -65,17 +65,17 @@ const Services = () => {
   ];
 
   return (
-    <section id="services" className="py-12 sm:py-16 lg:py-24 bg-white w-full">
+    <section id="services" className="py-16 sm:py-20 lg:py-24 bg-white w-full">
       <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12 sm:mb-16">
           <div className="inline-flex items-center px-3 sm:px-4 py-2 bg-gray-50 rounded-full border border-gray-200 mb-4 sm:mb-6 text-xs sm:text-sm">
             <div className="w-2 h-2 bg-[#194fe8] rounded-full mr-2"></div>
             <span className="font-medium text-gray-700">运维服务</span>
           </div>
-          <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-3 sm:mb-4">
+          <h2 className="text-3xl font-bold text-gray-900 mb-4 sm:mb-6">
             全周期专业服务支持
           </h2>
-          <p className="text-base sm:text-lg text-gray-600 max-w-3xl mx-auto px-4">
+          <p className="text-lg sm:text-xl lg:text-2xl text-gray-600 max-w-4xl mx-auto px-4 leading-relaxed">
             从系统搭建到运营优化，提供全方位的专业服务保障
           </p>
         </div>
